@@ -1,62 +1,164 @@
-# Express.js RESTful API Assignment
+# Express.js Products API
 
-This assignment focuses on building a RESTful API using Express.js, implementing proper routing, middleware, and error handling.
+A RESTful API built with Express.js to manage products, including full CRUD operations, authentication, logging, validation, and Swagger documentation.
 
-## Assignment Overview
+---
 
-You will:
-1. Set up an Express.js server
-2. Create RESTful API routes for a product resource
-3. Implement custom middleware for logging, authentication, and validation
-4. Add comprehensive error handling
-5. Develop advanced features like filtering, pagination, and search
+## **Table of Contents**
 
-## Getting Started
+- [Requirements](#requirements)  
+- [Installation](#installation)  
+- [Environment Variables](#environment-variables)  
+- [Running the Server](#running-the-server)  
+- [API Endpoints](#api-endpoints)  
+- [Swagger UI](#swagger-ui)  
+- [Examples](#examples)  
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Run the server:
-   ```
-   npm start
-   ```
+---
 
-## Files Included
+## **Requirements**
 
-- `Week2-Assignment.md`: Detailed assignment instructions
-- `server.js`: Starter Express.js server file
-- `.env.example`: Example environment variables file
+- Node.js v18 or higher  
+- npm (Node Package Manager)
 
-## Requirements
+---
 
-- Node.js (v18 or higher)
-- npm or yarn
-- Postman, Insomnia, or curl for API testing
+## **Installation**
 
-## API Endpoints
+1. Clone the repository:
 
-The API will have the following endpoints:
+```bash
+git clone https://github.com/PLP-MERN-Stack-Development/express-js-server-side-framework-naomitesfe.git
+cd express-js-server-side-framework-naomitesfe
+```
+# Install dependencies:
 
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get a specific product
-- `POST /api/products`: Create a new product
-- `PUT /api/products/:id`: Update a product
-- `DELETE /api/products/:id`: Delete a product
+```bash
+npm install
+```
+- Create a .env file (see Environment Variables).
 
-## Submission
+# Environment Variables
+- Create a .env file in the root of your project:
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+- .env
 
-1. Complete all the required API endpoints
-2. Implement the middleware and error handling
-3. Document your API in the README.md
-4. Include examples of requests and responses
+```bash
+PORT=3000
+API_KEY=supersecretkey123
+NODE_ENV=development
+``` 
+- PORT: Port where the server runs (default 3000)
+- API_KEY: API key required for authentication
+- NODE_ENV: Set to development for detailed error messages
 
-## Resources
+# Running the Server
+``` bash
+node server.js
+```
+Server should be running at:
+```bash
+http://localhost:3000
+Swagger UI: http://localhost:3000/api-docs
+```
+# API Endpoints
+# Products
+- Method	Endpoint	Description	Auth Required
+- GET	/api/products	List all products	Yes
+- GET	/api/products/:id	Get a single product by ID	Yes
+- POST	/api/products	Create a new product	Yes
+- PUT	/api/products/:id	Update an existing product	Yes
+- DELETE	/api/products/:id	Delete a product	Yes
 
-- [Express.js Documentation](https://expressjs.com/)
-- [RESTful API Design Best Practices](https://restfulapi.net/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 
+# Authentication:
+All routes require a header: x-api-key: <API_KEY>
+
+# Examples
+
+# GET all products
+powershell
+```bash
+Invoke-RestMethod -Uri "http://localhost:3000/api/products" `
+  -Headers @{ "x-api-key" = "supersecretkey123" } `
+  -Method GET
+  ```
+- Response:
+
+json
+```bash
+{
+  "total": 4,
+  "page": 1,
+  "limit": 10,
+  "products": [
+    {
+      "id": "1",
+      "name": "Tablet X Pro",
+      "description": "Updated tablet",
+      "price": 549.99,
+      "category": "electronics",
+      "inStock": false
+    },
+    ...
+  ]
+}
+```
+# POST create product
+powershell
+```bash
+Invoke-RestMethod -Uri "http://localhost:3000/api/products" `
+  -Headers @{ "x-api-key" = "supersecretkey123"; "Content-Type" = "application/json" } `
+  -Method POST `
+  -Body ('{
+      "name":"Tablet X",
+      "description":"High-end tablet",
+      "price":499.99,
+      "category":"electronics",
+      "inStock":true
+  }')
+  ```
+- Response:
+
+json
+```bash
+{
+  "id": "5",
+  "name": "Tablet X",
+  "description": "High-end tablet",
+  "price": 499.99,
+  "category": "electronics",
+  "inStock": true
+}
+```
+# PUT update product
+powershell
+```bash
+Invoke-RestMethod -Uri "http://localhost:3000/api/products/1" `
+  -Headers @{ "x-api-key" = "supersecretkey123"; "Content-Type" = "application/json" } `
+  -Method PUT `
+  -Body ('{
+      "name":"Tablet X Pro",
+      "description":"Updated tablet",
+      "price":549.99,
+      "category":"electronics",
+      "inStock":false
+  }')
+  ```
+# DELETE product
+powershell
+```bash
+Invoke-RestMethod -Uri "http://localhost:3000/api/products/1" `
+  -Headers @{ "x-api-key" = "supersecretkey123" } `
+  -Method DELETE
+  ```
+# Swagger UI
+All endpoints are documented with Swagger at:
+
+``` bash
+http://localhost:3000/api-docs
+You can try each endpoint interactively.
+```
+
+# Notes
+- Products are stored in-memory; restarting the server resets the data.
+- Make sure to use the correct API key in the x-api-key header.

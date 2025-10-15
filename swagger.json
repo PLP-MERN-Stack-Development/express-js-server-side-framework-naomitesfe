@@ -1,0 +1,134 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Product API",
+    "version": "1.0.0",
+    "description": "A simple RESTful API for products"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Get all products",
+        "parameters": [
+          { "name": "search", "in": "query", "schema": { "type": "string" } },
+          { "name": "category", "in": "query", "schema": { "type": "string" } },
+          { "name": "inStock", "in": "query", "schema": { "type": "boolean" } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 10 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProductList" } } }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new product",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "API key for authentication"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ProductInput" } }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created" },
+          "400": { "description": "Invalid input" }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Get a product by ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Success", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } } },
+          "404": { "description": "Product not found" }
+        }
+      },
+      "put": {
+        "summary": "Update a product",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "x-api-key", "in": "header", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/ProductInput" } }
+          }
+        },
+        "responses": {
+          "200": { "description": "Updated" },
+          "404": { "description": "Product not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete a product",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "x-api-key", "in": "header", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Deleted" },
+          "404": { "description": "Product not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "price": { "type": "number" },
+          "category": { "type": "string" },
+          "inStock": { "type": "boolean" }
+        }
+      },
+      "ProductInput": {
+        "type": "object",
+        "required": ["name", "price"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "price": { "type": "number" },
+          "category": { "type": "string" },
+          "inStock": { "type": "boolean" }
+        }
+      },
+      "ProductList": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer" },
+          "page": { "type": "integer" },
+          "limit": { "type": "integer" },
+          "products": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Product" }
+          }
+        }
+      }
+    }
+  }
+}
