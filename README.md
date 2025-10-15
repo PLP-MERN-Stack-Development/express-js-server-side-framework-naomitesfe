@@ -45,8 +45,9 @@ npm install
 
 ```bash
 PORT=3000
-API_KEY=supersecretkey123
+API_KEY=your_api_key_here
 NODE_ENV=development
+
 ``` 
 - PORT: Port where the server runs (default 3000)
 - API_KEY: API key required for authentication
